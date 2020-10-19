@@ -15,6 +15,7 @@ class VKApiRequest {
     private const PARAM_LANG = 'lang';
 
     private const KEY_ERROR = 'error';
+    private const KEY_ERROR_EXECUTE = 'execute_errors';
     private const KEY_RESPONSE = 'response';
 
     protected const CONNECTION_TIMEOUT = 10;
@@ -129,6 +130,12 @@ class VKApiRequest {
         if (isset($decode_body[static::KEY_ERROR])) {
             $error = $decode_body[static::KEY_ERROR];
             $api_error = new VKApiError($error);
+            throw ExceptionMapper::parse($api_error);
+        }
+        
+        if (isset($decode_body[static::KEY_ERROR_EXECUTE])) {
+            $error = $decode_body[static::KEY_ERROR_EXECUTE];
+            $api_error = new VKApiError($error[0]);
             throw ExceptionMapper::parse($api_error);
         }
 
